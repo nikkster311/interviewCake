@@ -1,6 +1,21 @@
-myArray = [12, 234, 56, 12,
-  3, 5, 5, 6, 3,
-   24, 3, 54, 5, 456, 34, 3, 2, 5, 1]
+myArray =   [
+  { startTime: 0,  endTime: 1 },
+  { startTime: 4,  endTime: 5 },
+  { startTime: 3,  endTime: 5 },
+  { startTime: 4,  endTime: 8 },
+  { startTime: 3,  endTime: 6 },
+  { startTime: 10, endTime: 12 },
+  { startTime: 9,  endTime: 10 },
+];
+
+secondArray =   [
+  { startTime: 1, endTime: 10 },
+  { startTime: 2, endTime: 6 },
+  { startTime: 3, endTime: 5 },
+  { startTime: 7, endTime: 9 },
+];
+
+var newA = [];
 
 function mergesort(a) {
   if (a.length<2) { //if the array only has one item, just return it
@@ -22,10 +37,10 @@ function merge(left, right) {
     console.log("RUNNING MERGE with " + left + " left and right " + right)
     var lIndex = 0;
     var rIndex = 0;
-    var newA = [];
+    newA = [];
     while (lIndex < left.length && rIndex < right.length) { //while right and left are not empty
-      console.log(`left = ${left[lIndex]}, right = ${right[rIndex]}`)
-      if (left[lIndex] <= right[rIndex]) { //if the number on the left is smaller or equal to that on the right
+      console.log(`left = ${left[lIndex].startTime}, right = ${right[rIndex].startTime}`)
+      if (left[lIndex].startTime <= right[rIndex].startTime) { //if the number on the left is smaller or equal to that on the right
         // console.log(`LLLLL _ LEFT ${left[j]} <= ${right[k]}`)
         newA.push(left[lIndex]); //add the num in left list to a
         lIndex++; //increment j
@@ -56,5 +71,36 @@ function merge(left, right) {
   }
 }
 
-mergesort(myArray);
-console.log(myArray);
+function mergetimes(a) {
+  for (var i=0; i+1<a.length; i++) { //search through all indices
+    console.log(i)
+    console.log("IIIIIIIIIIIII")
+    if (a[i].endTime >= a[i+1].startTime) { //if overlap
+      console.log("a i endTime= " + a[i].endTime)
+      console.log("a i+1 enditme " + a[i+1].endTime)
+      if (a[i].endTime >= a[i+1].endTime) { //if one meeting is happening the entire time another one is in session
+        a.splice(i+1, 1); //delete the whole shorter meeting
+        i--;
+      } else {
+        a[i].endTime = a[i+1].endTime; //replace end time of the earlier meeting
+
+        console.log(a[i])
+        console.log("^^^ A[i]")
+        a.splice(i+1, 1); //delete the later meeting
+        i--; //check that line again
+        console.log(a)
+      }
+    }
+  }
+  return(a);
+}
+
+
+mergesort(secondArray);
+
+console.log('done')
+console.log(newA);
+
+console.log("running mergetimes")
+mergetimes(newA);
+console.log(newA);
